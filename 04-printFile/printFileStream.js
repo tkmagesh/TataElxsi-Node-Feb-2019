@@ -4,6 +4,7 @@ var stream = fs.createReadStream('./sample.txt', { encoding :'utf8'});
 /*
 Events - open, data, end, close, error
 */
+/*
 var counter = 0;
 
 stream.on('open', () => {
@@ -23,3 +24,6 @@ stream.on('end', () => {
 stream.on('error', (err) => {
     console.log(err);
 });
+*/
+
+stream.pipe(process.stdout);
