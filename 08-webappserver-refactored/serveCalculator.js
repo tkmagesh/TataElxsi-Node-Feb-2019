@@ -1,7 +1,7 @@
 var querystring = require('querystring'),
     calculator = require('./calculator');
 
-module.exports = function(req, res){
+module.exports = function(req, res, next){
 	 if (req.urlObj.pathname === '/calculator' && req.method === 'GET'){
         var queryData = querystring.parse(req.urlObj.query),
             op = queryData.op,
@@ -11,7 +11,7 @@ module.exports = function(req, res){
 
         res.write(result.toString());
         res.end();
-        console.log('[@serveCalculator] - result sent');
+        next();
     } else if (req.urlObj.pathname === '/calculator' && req.method === 'POST') {
         var rawData = '';
         req.on('data', chunk => rawData += chunk);
@@ -24,6 +24,9 @@ module.exports = function(req, res){
 
             res.write(result.toString());
             res.end();
+            next();
         });
+    } else {
+        next();
     }
 }

@@ -9,7 +9,7 @@ function isStatic(resourceName){
     return staticExtns.indexOf(ext) >= 0;
 }
 
-module.exports = function(req, res){
+module.exports = function(req, res, next){
     if (isStatic(req.urlObj.pathname)){
         var resourceFullName = path.join(__dirname, req.urlObj.pathname);
         if (!fs.existsSync(resourceFullName)){
@@ -19,19 +19,9 @@ module.exports = function(req, res){
             return;
         }
         var stream = fs.createReadStream(resourceFullName);
-        stream.on('data', chunk => {
-            console.log('[@serveStatic] serving data');
-            res.write(chunk);
-        });
-
-        stream.on('end', () => {
-            console.log('[@serveStatic] serving data completed');
-            res.end();
-        });
-        stream.on('error', (err) => {
-            console.log(err);
-            res.statusCode = 500;
-            res.end();
-        });
+        stream.pipe(res);
+        stream.on('end', () => next());
+    } else {
+        next();
     }
 }
