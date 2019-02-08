@@ -1,3 +1,4 @@
+var chalk = require('chalk');
 
 module.exports = function(req, res, next){
 	var start = new Date();
@@ -5,7 +6,7 @@ module.exports = function(req, res, next){
 	res.on('finish', () => {
 		var end = new Date(),
 			delta = end - start;
-		console.log(`${req.method}\t${req.urlObj.pathname}\t${delta}Ms`);
+		console.log(chalk.cyan(`${req.method}`) + '\t' + chalk.blue(`${req.urlObj.pathname}`) + '\t' + chalk.green(`${delta}Ms`));
 	})
 	next();
 }
