@@ -1,5 +1,7 @@
 module.exports = function(req, res, next){
-	res.statusCode = 404;
-    res.end();
+	if (!res.finished){
+		res.statusCode = 404;
+	    res.end();
+	}
     next();
 }
